@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- Title -->
+    <title>Feedcrunch.io - Login</title>
+    <!-- Imports -->
+    <link rel="stylesheet" href="/plugins/css/materialize.min.css">
+    <link rel="stylesheet" href="/plugins/css/materialize-tags.min.css">
+    <link rel="stylesheet" href="/plugins/css/sweetalert.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        .card {
+            padding: 2em;
+            flex: 1 0 auto;
+            background: white;
+            border-radius: 40px;
+            width: 1100px;
+            height: 650px;
+        }
+        body {
+            left: calc(50% - 550px);
+            top: calc(50% - 325px);
+            position: absolute;
+            background-color:transparent;
+        }
+        .m-b-md{
+            padding: 1em 0;
+        }
+        .materialize-tags .tt-input {
+            border-bottom: none;
+            box-shadow: none;
+        }
+        #btn-row{
+            padding-top: 4em;
+        }
+        #switch-row{
+            margin: 0;
+        }
+        #close-btn{
+            top:15px;
+            right:15px;
+            position: absolute;
+        }
+        /*
+        .input-field input[type=text]:focus + label,
+        .input-field input[type=password]:focus + label {
+            color: #e91e63;
+        }
+        .input-field input[type=text]:focus,
+        .input-field input[type=password]:focus {
+            border-bottom: 2px solid #e91e63;
+            box-shadow: none;
+        }
+        #signup_link {
+            margin-top: 1em;
+            display: block;
+        }
+        #formtitle {
+            margin: 1.5em 0;
+        }
+        */
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <div class="card">
+            <div class="card-content">
+                <form id="add-form" action="#">
+                    <h3>Submit a new Article</h3>
+                    <a id="close-btn" class="btn-floating red"><i class="material-icons">close</i></a>
+                    <section>
+                        <div class="row">
+                            <div class="col m12">
+                                <div class="input-field col s12">
+                                    <label for="title">Enter the Article's Title</label>
+                                    <input id="title" name="title" type="text" class="required validate" data-init="" value="">
+                                </div>
+                                <div class="input-field col s12">
+                                    <label for="link">Enter the Article's Link</label>
+                                    <input id="link" name="link" type="text" class="required validate" data-init="" value="">
+                                </div>
+                                <div class="input-field col s12 no-padding">
+                                    <div class="input-field col s12">
+                                        <label for="tags">Enter up to 5 tags to improve social impact and search effiency</label>
+                                        <input type="text" name="tags" id="tags" class="typehead-input" data-init="" value=""/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12 m6 l3">
+                                        <!-- Switch -->
+                                        <div class="switch m-b-md">
+                                            <label>
+                                                <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Link Visible:</span>
+                                                <input type="checkbox" id="link-visible" name="link-visible"  data-init="true">
+                                                <span class="lever"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="input-field col s12 m6 l6" id="switch-row">
+
+                                            <div class="input-field col s12 m6 l6">
+                                                <!-- Switch -->
+                                                <div class="switch m-b-md">
+                                                    <label>
+                                                        <span>Publish on Twitter:</span>
+                                                        <input type="checkbox" id="twitter" name="twitter" data-init="true">
+                                                        <span class="lever"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="input-field col s12 m6">
+                                                <!-- Switch -->
+                                                <div class="switch m-b-md">
+                                                    <label>
+                                                        <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Publish on Facebook:</span>
+                                                        <input type="checkbox" id="facebook" name="facebook" data-init="true">
+                                                        <span class="lever"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="input-field col s12 m6">
+                                                <div class="switch m-b-md">
+                                                    <label>
+                                                        <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Publish on LinkedIn:</span>
+                                                        <input type="checkbox" id="linkedin" name="linkedin" data-init="{{ user.pref_post_repost_LKin }}">
+                                                        <span class="lever"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="input-field col s12 m6">
+                                                <div class="switch m-b-md">
+                                                    <label>
+                                                        <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Publish on Slack:</span>
+                                                        <input type="checkbox" id="slack" name="slack" data-init="{{ user.pref_post_repost_Slack }}">
+                                                        <span class="lever"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                    </div>
+                                    <div class="input-field col s12 m6 l3" >
+                                        <!-- Switch -->
+                                        <div class="switch m-b-md">
+                                            <label>
+                                                <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Title Auto Format:</span>
+                                                <input type="checkbox" id="auto-format" name="auto-format" data-init="{{ user.pref_post_autoformat }}">
+                                                <span class="lever"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s12" id="btn-row">
+                                <div class="col s12 m4 offset-m2">
+                                    <a class="waves-effect waves-light btn red" id="reset" style="width: 100%;"><i class="material-icons left">delete</i>Reset</a>
+                                </div>
+                                <div class="col s12 m4">
+                                    <a class="waves-effect waves-light btn light-blue darken-2 m-b-xs" id="submit"  style="width: 100%;"><i class="material-icons left">done</i>Submit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="/plugins/js/jquery.min.js"></script>
+    <script src="/plugins/js/cookies.min.js"></script>
+    <script src="/plugins/js/materialize.min.js"></script>
+    <script src="/plugins/js/typeahead.bundle.min.js"></script>
+    <script src="/plugins/js/materialize-tags.min.js"></script>
+    <script src="/plugins/js/sweetalert.min.js"></script>
+
+    <script src="/js/popup.js"></script>
+</body>
+
+</html>

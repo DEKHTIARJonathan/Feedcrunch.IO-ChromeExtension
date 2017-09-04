@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- Title -->
+    <title>Feedcrunch.io - Login</title>
+    <!-- Imports -->
+    <link rel="stylesheet" href="/plugins/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        main {
+            padding: 2em;
+            flex: 1 0 auto;
+            background: white;
+            border-radius: 40px;
+        }
+        body {
+            background: #fff;
+            width: 600px;
+            height: 600px;
+            left: calc(50% - 300px);
+            top: calc(50% - 300px);
+            position: absolute;
+            background-color:transparent;
+        }
+        .input-field input[type=text]:focus + label,
+        .input-field input[type=password]:focus + label {
+            color: #e91e63;
+        }
+        .input-field input[type=text]:focus,
+        .input-field input[type=password]:focus {
+            border-bottom: 2px solid #e91e63;
+            box-shadow: none;
+        }
+        .help-inline{
+            display: block;
+        }
+        #signup_link {
+            margin-top: 1em;
+            display: block;
+        }
+        #formtitle {
+            margin: 1.5em 0;
+        }
+        #close-btn{
+            top:15px;
+            right:15px;
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <center>
+            <a id="close-btn" class="btn-floating red"><i class="material-icons">close</i></a>
+            <img class="responsive-img" style="width: 200px;" src="https://feedcrunch.s3.amazonaws.com/static/images/logo-dark.png" />
+            <h5 class="indigo-text" id="formtitle">Please, login into your account</h5>
+            <div class="container">
+                <div class="z-depth-1 grey lighten-4 row" style="width: 100%; display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+                    <form id="login_form">
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate col s12' type='text' name='username' id='username' />
+                                <label for='username'>Enter your username</label>
+                                <div id="username-error" class="help-inline col s12"></div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate col s12' type='password' name='password' id='password' />
+                                <label for='password'>Enter your password</label>
+                                <div id="password-error" class="help-inline col s12"></div>
+                            </div>
+                            <label style='float: right;'>
+                                <a class='pink-text' href='#!'><b>Forgot Password?</b></a>
+                            </label>
+                        </div>
+
+                        <center>
+                            <div class='row'>
+                                <button id='btn_login' class='col s12 btn btn-large waves-effect indigo'>Login</button>
+                            </div>
+                        </center>
+                    </form>
+                </div>
+            </div>
+            <a href="https://www.feedcrunch.io/signup/" id="signup_link">Create account</a>
+        </center>
+    </main>
+
+    <script src="/plugins/js/jquery.min.js"></script>
+    <script src="/plugins/js/jquery.validate.min.js"></script>
+    <script src="/plugins/js/cookies.min.js"></script>
+    <script src="/plugins/js/materialize.min.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+
+</html>
