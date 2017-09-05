@@ -3,7 +3,8 @@ $( document ).ready(function() {
     var debug = true;
 
     if (debug)
-        endpoint = "http://local.feedcrunch.io:5000/";
+        /*endpoint = "http://local.feedcrunch.io:5000/";*/
+        endpoint = "https://feedcrunch-dev.eu-gb.mybluemix.net/";
     else
         endpoint = "https://www.feedcrunch.io/";
 
