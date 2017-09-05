@@ -37,8 +37,6 @@
         "tabs",
         "cookies",
         "storage",
-        "webRequest",
-        "webRequestBlocking",
         "*://*/*"
     ],
     "version": "1.0"

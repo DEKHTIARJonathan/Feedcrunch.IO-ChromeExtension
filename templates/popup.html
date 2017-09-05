@@ -15,12 +15,12 @@
             flex: 1 0 auto;
             background: white;
             border-radius: 40px;
-            width: 1100px;
-            height: 650px;
+            width: 1200px;
+            height: 600px;
         }
         body {
-            left: calc(50% - 550px);
-            top: calc(50% - 325px);
+            left: calc(50% - 600px);
+            top: calc(50% - 300px);
             position: absolute;
             background-color:transparent;
         }
@@ -40,6 +40,11 @@
         #close-btn{
             top:15px;
             right:15px;
+            position: absolute;
+        }
+        #disconnect-btn{
+            top:15px;
+            right:65px;
             position: absolute;
         }
         /*
@@ -71,6 +76,11 @@
                 <form id="add-form" action="#">
                     <h3>Submit a new Article</h3>
                     <a id="close-btn" class="btn-floating red"><i class="material-icons">close</i></a>
+                    <a id="disconnect-btn" class="waves-effect waves-light btn red">
+                        <i class="material-icons left">exit_to_app</i>
+                        Disconnect
+                    </a>
+
                     <section>
                         <div class="row">
                             <div class="col m12">
@@ -106,7 +116,7 @@
                                                 <div class="switch m-b-md">
                                                     <label>
                                                         <span>Publish on Twitter:</span>
-                                                        <input type="checkbox" id="twitter" name="twitter" data-init="true">
+                                                        <input type="checkbox" id="twitter" name="twitter" data-init="false">
                                                         <span class="lever"></span>
                                                     </label>
                                                 </div>
@@ -117,7 +127,7 @@
                                                 <div class="switch m-b-md">
                                                     <label>
                                                         <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Publish on Facebook:</span>
-                                                        <input type="checkbox" id="facebook" name="facebook" data-init="true">
+                                                        <input type="checkbox" id="facebook" name="facebook" data-init="false">
                                                         <span class="lever"></span>
                                                     </label>
                                                 </div>
@@ -127,7 +137,7 @@
                                                 <div class="switch m-b-md">
                                                     <label>
                                                         <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Publish on LinkedIn:</span>
-                                                        <input type="checkbox" id="linkedin" name="linkedin" data-init="{{ user.pref_post_repost_LKin }}">
+                                                        <input type="checkbox" id="linkedin" name="linkedin" data-init="false">
                                                         <span class="lever"></span>
                                                     </label>
                                                 </div>
@@ -137,7 +147,7 @@
                                                 <div class="switch m-b-md">
                                                     <label>
                                                         <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Publish on Slack:</span>
-                                                        <input type="checkbox" id="slack" name="slack" data-init="{{ user.pref_post_repost_Slack }}">
+                                                        <input type="checkbox" id="slack" name="slack" data-init="false">
                                                         <span class="lever"></span>
                                                     </label>
                                                 </div>
@@ -149,7 +159,7 @@
                                         <div class="switch m-b-md">
                                             <label>
                                                 <span class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="I am tooltip">Title Auto Format:</span>
-                                                <input type="checkbox" id="auto-format" name="auto-format" data-init="{{ user.pref_post_autoformat }}">
+                                                <input type="checkbox" id="auto-format" name="auto-format" data-init="false">
                                                 <span class="lever"></span>
                                             </label>
                                         </div>

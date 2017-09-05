@@ -3,23 +3,10 @@ $( document ).ready(function() {
     var debug = true;
 
     if (debug)
-        /*endpoint = "https://local.feedcrunch.io:8000/";*/
-        endpoint = "https://feedcrunch-dev.eu-gb.mybluemix.net/";
+        /*endpoint = "https://local.feedcrunch.io:5000/";*/
+        endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
     else
-        endpoint = "https://www.feedcrunch.io/";
-
-    var csrf_val = null;
-
-    chrome.cookies.get({ url: endpoint, name: 'csrftoken' },
-        function (cookie) {
-            if (cookie) {
-                csrf_val = cookie.value;
-            }
-            else {
-                alert('Can\'t get CSRF cookie! Please contact the admins.');
-            }
-        }
-    );
+        endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
 
     var curTab = null;
 
@@ -31,6 +18,7 @@ $( document ).ready(function() {
                 );
             });
         });
+        chrome.cookies.remove({url: endpoint, name: "sessionid"});
     }
     catch(err) {}
 
