@@ -17,8 +17,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    
 
                 if (!(result.loginToken))
                     target_webpage += "login.html";
-                else
+                else{
+                    localStorage.setItem("loginToken", result.loginToken);
                     target_webpage += "popup.html";
+                }
 
                 /* target_webpage = "templates/login.html"; */
 
@@ -34,7 +36,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    
             });
         }
 
-        sendResponse({result: "success"});
+        sendResponse({"result": "success"});
 
     }
 

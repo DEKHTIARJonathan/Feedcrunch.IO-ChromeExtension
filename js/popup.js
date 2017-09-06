@@ -8,7 +8,6 @@ $(document).ready(function() {
     else
         endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
 
-    var tags     = null;
     var max_tags = 5;
     var max_suggestion_display = 5;
 
@@ -21,12 +20,15 @@ $(document).ready(function() {
         'auto-format'
     ];
 
-    var auth_token = null;
-
     try {
+        if (localStorage.getItem("loginToken") === null) {
+            throw("User Not Logged In: loginToken does not exists!");
+        }
+
         chrome.tabs.getSelected(null, function(tab) {
             $("#title").data("init", tab.title);
             $("#link").data("init", tab.url);
+
             clearFields();
 
             $('#close-btn').on('click', function(){
@@ -36,81 +38,68 @@ $(document).ready(function() {
             });
         });
 
-        chrome.storage.local.get('loginToken', function(result) {
-            if (result.loginToken){
-                auth_token = result.loginToken;
-                initialize_tags();
-            }
-            else
-                alert("Not logged in!");
-        });
-
         chrome.cookies.remove({url: endpoint, name: "sessionid"});
 
     } catch (err) {
-        $("#title").data("init", "Debug Title");
-        $("#link").data("init", "http://www.example.com");
-        clearFields();
+        console.log("Error: " + err);
+        window.location = "login.html";
     }
 
+    var tags = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      limit: max_suggestion_display,
+      prefetch: {
+          url: endpoint + "api/1.0/authenticated/get/tags/",
+          prepare: function (settings) {
+              settings.type = "GET";
+              settings.beforeSend = function(xhr) {
+                  xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+              };
+              return settings;
+          },
+          filter: function(list) {
+              return $.map(list.tags, function(tag) {
+                  return {
+                      name: tag
+                  };
+              });
+          },
+          cache: false //NEW!
+      }
+    });
+
+    tags.initialize();
+
     $('#disconnect-btn').on('click', function(){
+        localStorage.removeItem('loginToken');
         chrome.storage.local.remove('loginToken');
         window.location = "login.html";
     });
 
-    function initialize_tags(){
-        tags = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: max_suggestion_display,
-            prefetch: {
-                url: endpoint + "api/1.0/authenticated/get/tags/",
-                prepare: function (settings) {
-                    settings.type = "GET";
-                    settings.beforeSend = function(xhr) {
-                       xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
-                    };
-                    return settings;
-                },
-                filter: function(list) {
-                    return $.map(list.tags, function(tag) {
-                        return {
-                            name: tag
-                        };
-                    });
-                },
-                cache: false //NEW!
-            }
-        });
-
-        tags.initialize();
-
-        $("#tags").materialtags({
-            maxTags: max_tags,
-            trimValue: true,
-            confirmKeys: [9, 13, 32, 44, 188],
-            deleteTagsOnBackspace: false,
-            deleteTagsOnDeleteKey: false,
-            MoveTagOnLeftArrow: false,
-            MoveTagOnRightArrow: false,
-            CapitalizeFirstLetterOnly: true,
-            typeaheadjs: [{
-                    autoselect: true,
-                    highlight: true,
-                },
-                {
-                    name: 'tags',
-                    displayKey: 'name',
-                    valueKey: 'name',
-                    source: tags.ttAdapter(),
-                }
-            ]
-        });
-    }
-
+    $("#tags").materialtags({
+      maxTags: max_tags,
+      trimValue: true,
+      confirmKeys: [9, 13, 32, 44, 188],
+      deleteTagsOnBackspace: false,
+      deleteTagsOnDeleteKey: false,
+      MoveTagOnLeftArrow: false,
+      MoveTagOnRightArrow: false,
+      CapitalizeFirstLetterOnly: true,
+      typeaheadjs: [{
+              autoselect: true,
+              highlight: true,
+          },
+          {
+              name: 'tags',
+              displayKey: 'name',
+              valueKey: 'name',
+              source: tags.ttAdapter(),
+          }
+      ]
+    });
 
     function clearFields() {
-
         var title = $("#title").data("init");
         var link = $("#link").data("init");
 
@@ -173,7 +162,7 @@ $(document).ready(function() {
                 autoformat: $('#auto-format').prop('checked'),
             },
             beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
+                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
             },
             success: function(data) {
                 if (data.success) {

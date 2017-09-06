@@ -106,6 +106,7 @@ $( document ).ready(function() {
                     chrome.storage.local.set({
                             'loginToken': response.token
                         }, function() {
+                            localStorage.setItem("loginToken", response.token);
                             window.location = "popup.html";
                         }
                     );
@@ -137,12 +138,3 @@ $( document ).ready(function() {
     });
 
 });
-
-/*
-chrome.storage.local.get('loginToken', function(result) {
-    if (!(result.loginToken)) {
-        alert("please login with your details!!");
-    }
-
-})
-*/
