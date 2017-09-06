@@ -1,10 +1,13 @@
 $( document ).ready(function() {
     var endpoint = null;
-    var debug = true;
+    var debug    = false;
+    var local    = true;
 
     if (debug)
-        /*endpoint = "https://local.feedcrunch.io:5000/";*/
-        endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
+        if (local)
+            endpoint = "https://local.feedcrunch.io:5000/";
+        else
+            endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
     else
         endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
 

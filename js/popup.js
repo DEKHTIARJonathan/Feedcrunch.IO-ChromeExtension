@@ -1,10 +1,13 @@
-$(document).ready(function() {
+$( document ).ready(function() {
     var endpoint = null;
-    var debug = true;
+    var debug    = false;
+    var local    = true;
 
     if (debug)
-        /*endpoint = "https://local.feedcrunch.io:5000/";*/
-        endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
+        if (local)
+            endpoint = "https://local.feedcrunch.io:5000/";
+        else
+            endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
     else
         endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
 
@@ -12,12 +15,12 @@ $(document).ready(function() {
     var max_suggestion_display = 5;
 
     var switches_list = [
-        'link-visible',
+        'visibility',
         'twitter',
         'facebook',
         'linkedin',
         'slack',
-        'auto-format'
+        'autoformat'
     ];
 
     try {
@@ -28,6 +31,31 @@ $(document).ready(function() {
         chrome.tabs.getSelected(null, function(tab) {
             $("#title").data("init", tab.title);
             $("#link").data("init", tab.url);
+
+            $.ajax({
+                url: endpoint + "api/1.0/authenticated/get/user/preferences/",
+                type: "GET",
+                dataType: "json",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+                },
+                async: false,
+                success: function(data) {
+                    if (data.success) {
+                        for (switch_box in switches_list) {
+                            var input = $("#" + switches_list[switch_box]);
+
+                            pref_value = data.preferences[switches_list[switch_box]];
+
+                            if (pref_value == "disabled")
+                                input.prop("disabled", true);
+                            else
+                                input.data("init", pref_value);
+                        }
+                    } else
+                        console.log(data.error);
+                }
+            });
 
             clearFields();
 
@@ -154,40 +182,29 @@ $(document).ready(function() {
                 title: $("#title").val(),
                 link: $("#link").val(),
                 tags: $("#tags").val(),
-                activated: $('#link-visible').prop('checked'),
+                activated: $('#visibility').prop('checked'),
                 twitter: $('#twitter').prop('checked'),
                 facebook: $('#facebook').prop('checked'),
                 linkedin: $('#linkedin').prop('checked'),
                 slack: $('#slack').prop('checked'),
-                autoformat: $('#auto-format').prop('checked'),
+                autoformat: $('#autoformat').prop('checked'),
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
             },
             success: function(data) {
                 if (data.success) {
-                    if (data.operation == "submit article") {
-                        clearFields();
-                        swal({
-                            title: "Good job!",
-                            text: "Article Submitted!",
-                            type: "success",
-                            timer: 1500,
-                            showConfirmButton: false,
-                        });
-                    } else {
-                        swal({
-                            title: "Article Modified!",
-                            text: "Redirecting you to the edit listing in 3 seconds.",
-                            type: "success",
-                            timer: 3000,
-                            showConfirmButton: false,
-                        }, function() {
-                            window.location = request_url.split("/", 5).join("/") + "/"
-                            swal.close();
-                        });
-                    }
-
+                    clearFields();
+                    swal({
+                        title: "Good job!",
+                        text: "Article Submitted!",
+                        type: "success",
+                        timer: 1500,
+                        showConfirmButton: false,
+                    }, function() {                        
+                        swal.close();
+                        $('#close-btn').trigger("click");
+                    });
                 } else {
                     swal({
                         title: "Something went wrong!",
