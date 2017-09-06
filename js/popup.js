@@ -8,6 +8,7 @@ $(document).ready(function() {
     else
         endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
 
+    var tags     = null;
     var max_tags = 5;
     var max_suggestion_display = 5;
 
@@ -36,8 +37,10 @@ $(document).ready(function() {
         });
 
         chrome.storage.local.get('loginToken', function(result) {
-            if (result.loginToken)
+            if (result.loginToken){
                 auth_token = result.loginToken;
+                initialize_tags();
+            }
             else
                 alert("Not logged in!");
         });
@@ -50,46 +53,61 @@ $(document).ready(function() {
         clearFields();
     }
 
-    var tags = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        limit: max_suggestion_display,
-        prefetch: {
-            url: endpoint + "api/1.0/authenticated/get/tags/",
-            filter: function(list) {
-                return $.map(list.tags, function(tag) {
-                    return {
-                        name: tag
+    $('#disconnect-btn').on('click', function(){
+        chrome.storage.local.remove('loginToken');
+        window.location = "login.html";
+    });
+
+    function initialize_tags(){
+        tags = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: max_suggestion_display,
+            prefetch: {
+                url: endpoint + "api/1.0/authenticated/get/tags/",
+                prepare: function (settings) {
+                    settings.type = "GET";
+                    settings.beforeSend = function(xhr) {
+                       xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
                     };
-                });
-            },
-            cache: false //NEW!
-        }
-    });
-
-    tags.initialize();
-
-    $("#tags").materialtags({
-        maxTags: max_tags,
-        trimValue: true,
-        confirmKeys: [9, 13, 32, 44, 188],
-        deleteTagsOnBackspace: false,
-        deleteTagsOnDeleteKey: false,
-        MoveTagOnLeftArrow: false,
-        MoveTagOnRightArrow: false,
-        CapitalizeFirstLetterOnly: true,
-        typeaheadjs: [{
-                autoselect: true,
-                highlight: true,
-            },
-            {
-                name: 'tags',
-                displayKey: 'name',
-                valueKey: 'name',
-                source: tags.ttAdapter(),
+                    return settings;
+                },
+                filter: function(list) {
+                    return $.map(list.tags, function(tag) {
+                        return {
+                            name: tag
+                        };
+                    });
+                },
+                cache: false //NEW!
             }
-        ]
-    });
+        });
+
+        tags.initialize();
+
+        $("#tags").materialtags({
+            maxTags: max_tags,
+            trimValue: true,
+            confirmKeys: [9, 13, 32, 44, 188],
+            deleteTagsOnBackspace: false,
+            deleteTagsOnDeleteKey: false,
+            MoveTagOnLeftArrow: false,
+            MoveTagOnRightArrow: false,
+            CapitalizeFirstLetterOnly: true,
+            typeaheadjs: [{
+                    autoselect: true,
+                    highlight: true,
+                },
+                {
+                    name: 'tags',
+                    displayKey: 'name',
+                    valueKey: 'name',
+                    source: tags.ttAdapter(),
+                }
+            ]
+        });
+    }
+
 
     function clearFields() {
 
