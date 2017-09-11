@@ -25,7 +25,32 @@ $( document ).ready(function() {
 		            $("#title").data("init", response.title);
 		        	$("#link").data("init", response.url);
 
-		        	init_webpage();
+                    $.ajax({
+        	            url: endpoint + "api/1.0/authenticated/get/user/preferences/",
+        	            type: "GET",
+        	            dataType: "json",
+        	            beforeSend: function(xhr) {
+        	                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+        	            },
+        	            success: function(data) {
+        	                if (data.success) {
+        	                    for (switch_box in switches_list) {
+        	                        var input = $("#" + switches_list[switch_box]);
+
+        	                        pref_value = data.preferences[switches_list[switch_box]];
+
+        	                        if (pref_value == "disabled")
+        	                            input.prop("disabled", true);
+        	                        else
+        	                            input.data("init", pref_value);
+        	                    }
+
+            		        	init_webpage();
+
+        	                } else
+        	                    console.log("Error: " + data.error);
+        	            }
+        	        });
 		        }
 		        else{
 		            console.log("Response:" + response.result);
@@ -44,31 +69,6 @@ $( document ).ready(function() {
 	        if (localStorage.getItem("loginToken") === null) {
 	            throw ("User Not Logged In: loginToken does not exists!");
 	        }
-
-	        $.ajax({
-	            url: endpoint + "api/1.0/authenticated/get/user/preferences/",
-	            type: "GET",
-	            dataType: "json",
-	            beforeSend: function(xhr) {
-	                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
-	            },
-	            async: false,
-	            success: function(data) {
-	                if (data.success) {
-	                    for (switch_box in switches_list) {
-	                        var input = $("#" + switches_list[switch_box]);
-
-	                        pref_value = data.preferences[switches_list[switch_box]];
-
-	                        if (pref_value == "disabled")
-	                            input.prop("disabled", true);
-	                        else
-	                            input.data("init", pref_value);
-	                    }
-	                } else
-	                    console.log(data.error);
-	            }
-	        });
 
 	        var tags = new Bloodhound({
 	            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),

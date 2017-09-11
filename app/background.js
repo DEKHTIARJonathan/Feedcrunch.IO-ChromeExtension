@@ -1,18 +1,26 @@
-var debug        = false;
 var local        = false;
 var api_endpoint = null;
 
-if (debug){
-	if (local){
-        api_endpoint = "https://local.feedcrunch.io:5000/";
-	}
-    else{
-        api_endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
+chrome.management.get(chrome.runtime.id, function(app_info){
+    if (app_info.installType == "development"){
+        if (local){
+            api_endpoint = "https://local.feedcrunch.io:5000/";
+    	}
+        else{
+            api_endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
+        }
+        chrome.browserAction.setIcon({
+            path: {
+                "16": "img/icon_dev.png",
+                "48": "img/iconLauncher_dev.png",
+                "128": "img/iconStore_dev.png"
+            }
+        });
     }
-}
-else{
-    api_endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
-}
+    else {
+        api_endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
+    }
+});
 
 chrome.browserAction.onClicked.addListener(function() {
 
@@ -28,8 +36,8 @@ chrome.browserAction.onClicked.addListener(function() {
 	        	title: tabs[0].title,
 	        	url: tabs[0].url,
 	        },
-	        function(response) {
-	            if (response.result != "success"){
+	        function(response){
+                if (response != undefined && response.result != "success"){
 	            	console.log(response);
 	            	console.log(response.result);
 	            }
