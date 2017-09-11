@@ -1,4 +1,4 @@
-var debug        = true;
+var debug        = false;
 var local        = false;
 var api_endpoint = null;
 
