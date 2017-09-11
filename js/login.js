@@ -1,32 +1,37 @@
 $( document ).ready(function() {
-    var endpoint = null;
-    var debug    = false;
-    var local    = true;
 
-    if (debug)
-        if (local)
-            endpoint = "https://local.feedcrunch.io:5000/";
-        else
-            endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
-    else
-        endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
+    var endpoint = null;
+
+    chrome.runtime.sendMessage({action: "get_endpoint"}, function(response) {
+        if (response.result == "success"){
+            endpoint = response.endpoint;
+        }
+        else{
+            console.log("Response:" + response.result);
+        }
+    });
 
     var curTab = null;
 
     try {
-        chrome.tabs.getSelected(null, function(tab){
-            $('#close-btn').on('click', function(){
-                chrome.tabs.executeScript(tab.id,
-                    {code: 'document.getElementById("feedcrunch-window").remove();'}
-                );
+        $('#close-btn').on('click', function(){
+            chrome.runtime.sendMessage({action: "shutdown-iframe"}, function(response) {
+                if (response.result != "success"){
+                    console.log("Response:" + response.result);
+                }
             });
         });
-        chrome.cookies.remove({url: endpoint, name: "sessionid"});
     }
-    catch(err) {}
+    catch(err) {
+        console.log("error: " + err);
+    }
 
     $('#signup_link').on('click', function(){
-        chrome.tabs.create({url: $(this).attr('href')});
+         chrome.runtime.sendMessage({action: "open_signup_tab"}, function(response) {
+            if (response.result != "success"){
+                console.log("Response:" + response.result);
+            }
+        });
         return false;
     });
 
@@ -73,37 +78,15 @@ $( document ).ready(function() {
 
         if(! $("#login_form").valid()) return false;
 
-        var formData = new FormData();
-        formData.append('username', $("#username").val());
-        formData.append('password', $("#password").val());
-
-        /*
-        data: {
-            'username': $("#username").val(),
-            'password': $("#password").val()
-        }
-        */
-
         $.ajax({
             url: endpoint + "api/1.0/get_auth_token/",
             type: 'POST',
-            // Fetch the stored token from localStorage and set in the header
-            data: formData,
+            data: {
+                'username': $("#username").val(),
+                'password': $("#password").val()
+            },
             dataType: "json",
-            mimeType: "multipart/form-data",
-            contentType: false,
             cache: false,
-            processData:false,
-            xhrFields: {
-              withCredentials: false
-            },
-            headers: {
-                 'Cache-Control': 'no-cache'
-            },
-            beforeSend: function(xhr) {
-                /*xhr.setRequestHeader('X-CSRFToken', csrf_val);*/
-                /*xhr.setRequestHeader('X-CSRFToken', 'Fiy8DD6Epge9I7geiWOMTlXZdSsZMnBlq4XOH9JDmTfnilNQcsg2kTtnvnJ0c2w2');*/
-            },
             success: function(response){
                 if (response.token) {
                     chrome.storage.local.set({
@@ -132,7 +115,7 @@ $( document ).ready(function() {
                         console.log("password is missing!");
                     }
 
-                    if (! error_found)
+                    if (!error_found)
                         console.log(xhr.responseText);
                 }
             }

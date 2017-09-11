@@ -7,9 +7,23 @@
     <!-- Imports -->
     <link rel="stylesheet" href="/plugins/css/materialize.min.css">
     <link rel="stylesheet" href="/plugins/css/materialize-tags.min.css">
-    <link rel="stylesheet" href="/plugins/css/sweetalert.css">
+    <link rel="stylesheet" href="/plugins/css/sweetalert2.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <style>
+        body {
+            left: calc(50% - 600px);
+            top: calc(50% - 300px);
+            width: 1200px;
+            height: 600px;
+            position: absolute;
+            background-color:transparent;
+            font-size: 12px;
+        }
+        main{
+            top: 0px;
+            left: 0px;
+            position: absolute;
+        }
         .card {
             padding: 2em;
             flex: 1 0 auto;
@@ -17,12 +31,7 @@
             border-radius: 40px;
             width: 1200px;
             height: 600px;
-        }
-        body {
-            left: calc(50% - 600px);
-            top: calc(50% - 300px);
-            position: absolute;
-            background-color:transparent;
+            margin: 0px;
         }
         .m-b-md{
             padding: 1em 0;
@@ -169,11 +178,10 @@
 
 
     <script src="/plugins/js/jquery.min.js"></script>
-    <script src="/plugins/js/cookies.min.js"></script>
     <script src="/plugins/js/materialize.min.js"></script>
     <script src="/plugins/js/typeahead.bundle.min.js"></script>
     <script src="/plugins/js/materialize-tags.min.js"></script>
-    <script src="/plugins/js/sweetalert.min.js"></script>
+    <script src="/plugins/js/sweetalert2.min.js"></script>
 
     <script src="/js/popup.js"></script>
 </body>

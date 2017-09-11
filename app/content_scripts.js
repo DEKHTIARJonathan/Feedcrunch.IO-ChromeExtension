@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
     if (request.command == "create_window"){
 
@@ -22,8 +22,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    
                     target_webpage += "popup.html";
                 }
 
-                /* target_webpage = "templates/login.html"; */
-
                 iframe.src = chrome.runtime.getURL(target_webpage);
                 iframe.id = iframe_id;
 
@@ -34,10 +32,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    
 
                 document.body.appendChild(iframe);
             });
+
+            sendResponse({result: "success"});
+        }
+        else{
+            sendResponse({result: "error: iframe already exists"});
         }
 
-        sendResponse({"result": "success"});
-
     }
+    else{
+        sendResponse({result: "error: command unknown: " + request.command});
+    }
+
 
 });

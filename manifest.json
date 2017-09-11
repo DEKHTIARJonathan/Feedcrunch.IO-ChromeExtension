@@ -12,13 +12,17 @@
     "content_scripts": [
         {
             "js": [
+                "plugins/js/jquery.min.js",
+                "plugins/js/jquery.validate.min.js",
+                "plugins/js/materialize.min.js",
+                "plugins/js/sweetalert2.min.js",
+                "plugins/js/typeahead.bundle.min.js",
+                "plugins/js/materialize-tags.min.js",
                 "app/content_scripts.js"
             ],
             "matches": [
                 "*://*/*"
-            ],
-            "run_at": "document_end",
-            "all_frames": true
+            ]
         }
     ],
     "web_accessible_resources": [
@@ -39,5 +43,5 @@
         "storage",
         "*://*/*"
     ],
-    "version": "1.0.1"
+    "version": "1.0.2"
 }
