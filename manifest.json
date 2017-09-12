@@ -1,49 +1,47 @@
 {
-    "author": "Jonathan DEKHTIAR",
+
     "name": "Feedcrunch.IO",
     "short_name": "Feedcrunch",
-    "description": "Feedcrunch.IO - Chrome Extension",
+    "author": "Jonathan DEKHTIAR",
     "manifest_version": 2,
     "version": "1.0.5",
+
+    "description": "Feedcrunch.IO - Chrome Extension",
     "icons": {
-        "16": "img/icon.png",
+        "19": "img/icon.png",
         "48": "img/iconLauncher.png",
         "128": "img/iconStore.png"
     },
+
     "background": {
         "scripts": [
             "app/background.js"
         ],
         "persistent": true
     },
+
     "browser_action": {
         "default_icon": "img/icon.png"
     },
+
     "content_scripts": [
         {
-            "js": [
-                "plugins/js/jquery.min.js",
-                "plugins/js/jquery.validate.min.js",
-                "plugins/js/materialize.min.js",
-                "plugins/js/sweetalert2.min.js",
-                "plugins/js/typeahead.bundle.min.js",
-                "plugins/js/materialize-tags.min.js",
-                "app/content_scripts.js"
-            ],
-            "matches": [
-                "*://*/*"
-            ]
+            "js": ["app/content_scripts.js"],
+            "matches": ["http://*/*", "https://*/*"]
         }
     ],
+
     "web_accessible_resources": [
         "templates/*.html"
     ],
+
     "permissions": [
         "activeTab",
         "tabs",
         "cookies",
         "storage",
         "management",
-        "*://*/*"
+		"http://*/*",
+		"https://*/*"
     ]
 }
