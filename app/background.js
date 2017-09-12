@@ -2,6 +2,30 @@ var local           = false;
 var api_endpoint    = null;
 var current_rssfedd = null;
 
+var icon_dict       = {};
+var icon_data       = {
+    prod: {
+        no_rss: chrome.runtime.getManifest().icons,
+        with_rss: {
+            "19": "img/icon_add.png",
+            "48": "img/iconLauncher_add.png",
+            "128": "img/iconStore_add.png"
+        }
+    },
+    debug: {
+        no_rss: {
+            "19": "img/icon_dev.png",
+            "48": "img/iconLauncher_dev.png",
+            "128": "img/iconStore_dev.png"
+        },
+        with_rss: {
+            "19": "img/icon_add_dev.png",
+            "48": "img/iconLauncher_add_dev.png",
+            "128": "img/iconStore_add_dev.png"
+        }
+    }
+}
+
 function checkRSSFeeds() {
     //query the information on the active tab
     chrome.tabs.query({active: true, currentWindow: true}, function(tab){
@@ -17,15 +41,15 @@ function checkRSSFeeds() {
                 if(chrome.runtime.lastError == undefined){
                     current_rssfedd = rss_href[0];
                     if (current_rssfedd != null){
-                        chrome.browserAction.setIcon({path: "img/icon_add_dev.png"});
+                        chrome.browserAction.setIcon({path: icon_dict.with_rss});
                     }
                     else {
-                        chrome.browserAction.setIcon({path: "img/icon_dev.png"});
+                        chrome.browserAction.setIcon({path: icon_dict.no_rss});
                     }
                 }
                 else {
                     current_rssfedd = null;
-                    chrome.browserAction.setIcon({path: "img/icon_dev.png"});
+                    chrome.browserAction.setIcon({path: icon_dict.no_rss});
                 }
 
             }
@@ -47,21 +71,19 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 chrome.management.get(chrome.runtime.id, function(app_info){
     if (app_info.installType == "development"){
+
+        icon_dict = icon_data.debug;
+
         if (local){
             api_endpoint = "https://local.feedcrunch.io:5000/";
     	}
         else{
             api_endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
         }
-        chrome.browserAction.setIcon({
-            path: {
-                "19": "img/icon_dev.png",
-                "48": "img/iconLauncher_dev.png",
-                "128": "img/iconStore_dev.png"
-            }
-        });
+        chrome.browserAction.setIcon({path: icon_dict.no_rss});
     }
     else {
+        icon_dict = icon_data.prod;
         api_endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
     }
 });
