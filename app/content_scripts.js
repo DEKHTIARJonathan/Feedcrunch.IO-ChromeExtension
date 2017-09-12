@@ -1,5 +1,4 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-
     if (request.command == "create_window"){
 
         var iframe_id = "feedcrunch-window";
@@ -19,7 +18,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
                     target_webpage += "login.html";
                 else{
                     localStorage.setItem("loginToken", result.loginToken);
-                    target_webpage += "popup.html";
+                    target_webpage += "submit_article.html";
                 }
 
                 iframe.src = chrome.runtime.getURL(target_webpage);

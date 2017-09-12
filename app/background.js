@@ -1,5 +1,49 @@
-var local        = false;
-var api_endpoint = null;
+var local           = false;
+var api_endpoint    = null;
+var current_rssfedd = null;
+
+function checkRSSFeeds() {
+    //query the information on the active tab
+    chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+
+        chrome.tabs.executeScript(
+            tab[0].id,
+            {
+                code: 'var rss_tag = document.querySelector("[type=\'application/rss+xml\']"); \
+                      if (rss_tag == null){rss_tag = document.querySelector("[type=\'application/atom+xml\']");} \
+                      if (rss_tag == null) {null} else {rss_tag.href}'
+            },
+            function(rss_href){
+                if(chrome.runtime.lastError == undefined){
+                    current_rssfedd = rss_href[0];
+                    if (current_rssfedd != null){
+                        chrome.browserAction.setIcon({path: "img/icon_add_dev.png"});
+                    }
+                    else {
+                        chrome.browserAction.setIcon({path: "img/icon_dev.png"});
+                    }
+                }
+                else {
+                    current_rssfedd = null;
+                    chrome.browserAction.setIcon({path: "img/icon_dev.png"});
+                }
+
+            }
+        );
+
+    });
+
+}
+
+//listen for new tab to be activated
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+    checkRSSFeeds();
+});
+
+//listen for current tab to be changed
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    checkRSSFeeds();
+});
 
 chrome.management.get(chrome.runtime.id, function(app_info){
     if (app_info.installType == "development"){
@@ -11,7 +55,7 @@ chrome.management.get(chrome.runtime.id, function(app_info){
         }
         chrome.browserAction.setIcon({
             path: {
-                "16": "img/icon_dev.png",
+                "19": "img/icon_dev.png",
                 "48": "img/iconLauncher_dev.png",
                 "128": "img/iconStore_dev.png"
             }
@@ -62,18 +106,19 @@ chrome.runtime.onMessage.addListener(
             chrome.tabs.create({url: "https://www.feedcrunch.io/signup/"});
             sendResponse({result: "success"});
     	}
-    	else if (request.action == "get_pageinfo"){
-        	sendResponse({
-    			result: "success",
-    			title: sender.tab.title,
-    			url: sender.tab.url
-    		});
-    	}
     	else if(request.action == "shutdown-iframe"){
         	chrome.tabs.executeScript(sender.tab.id,
                 {code: 'document.getElementById("feedcrunch-window").remove();'}
             );
             sendResponse({result: "success"});
+        }
+        else if(request.action == "get_pageinfo"){
+            sendResponse({
+                result: "success",
+                rss_link: current_rssfedd,
+                title: sender.tab.title,
+                url: sender.tab.url
+            });
         }
         else{
         	sendResponse({result: "error: unknown action: " + request.action});

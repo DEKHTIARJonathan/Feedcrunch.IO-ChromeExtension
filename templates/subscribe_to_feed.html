@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    <!-- Title -->
+    <title>Feedcrunch.io - Login</title>
+    <!-- Imports -->
+    <link rel="stylesheet" href="/plugins/css/materialize.min.css">
+    <link rel="stylesheet" href="/plugins/css/materialize-tags.min.css">
+    <link rel="stylesheet" href="/plugins/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        body {
+            left: calc(50% - 600px);
+            top: calc(50% - 250px);
+            width: 1200px;
+            height: 500px;
+            position: absolute;
+            background-color:transparent;
+            font-size: 12px;
+        }
+        main{
+            top: 0px;
+            left: 0px;
+            position: absolute;
+        }
+        .card {
+            padding: 2em;
+            flex: 1 0 auto;
+            background: white;
+            border-radius: 40px;
+            width: 1200px;
+            height: 500px;
+            margin: 0px;
+        }
+        #close-btn{
+            top:15px;
+            right:15px;
+            position: absolute;
+        }
+        #return_to_submit-btn{
+            top:15px;
+            right:250px;
+            margin-top: 2px;
+            position: absolute;
+        }
+        #disconnect-btn{
+            top:15px;
+            right:65px;
+            margin-top: 2px;
+            position: absolute;
+        }
+        #subscribe-form{
+            padding-top: 25px;
+        }
+        #btn-row{
+            padding-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <div class="card">
+            <div class="card-content">
+                <form id="subscribe-form" action="#">
+                    <h3>Subscribe to a new RSS Feed</h3>
+                    <a id="close-btn" class="btn-floating red"><i class="material-icons">close</i></a>
+                    <a id="disconnect-btn" class="waves-effect waves-light btn red">
+                        <i class="material-icons left">exit_to_app</i>
+                        Disconnect
+                    </a>
+                    <a id="return_to_submit-btn" class="waves-effect waves-light btn orange darken-3">
+                        <i class="material-icons left">rss_feed</i>
+                        Return article saving
+                    </a>
+
+                    <section>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <label for="rssfeed_link">RSS Feed Link</label>
+                                <input id="rssfeed_link" name="rssfeed_link" data-init="" type="text" class="validate">
+                                <div id="link-ajax-rslt">&emsp;</div>
+                            </div>
+
+                            <div class="input-field col s12">
+                                <label for="rssfeed_title">RSS Feed Title</label>
+                                <input id="rssfeed_title" name="rssfeed_title" data-init="" type="text" class="validate">
+                            </div>
+
+                            <input type="hidden" id="rssfeed_id" data-init="" value="-1">
+
+                            <div class="input-field col m12">
+                                <span id="reload-info"></span>
+                            </div>
+                        </div>
+
+                        <div class="row" id="btn-row">
+                            <div class="col s12 m4 offset-m2">
+                                <a class="waves-effect waves-light btn red" id="reset" style="width: 100%;"><i class="material-icons left">delete</i>Reset</a>
+                            </div>
+                            <div class="col s12 m4">
+                                <a class="waves-effect waves-light btn light-blue darken-2 m-b-xs" id="save-btn-rssfeed"  style="width: 100%;"><i class="material-icons left">done</i>Submit</a>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="/plugins/js/jquery.min.js"></script>
+    <script src="/plugins/js/materialize.min.js"></script>
+    <script src="/plugins/js/sweetalert2.min.js"></script>
+
+    <script src="/js/generic_btn_actions.js"></script>
+    <script src="/js/subscribe_to_feed.js"></script>
+</body>
+
+</html>

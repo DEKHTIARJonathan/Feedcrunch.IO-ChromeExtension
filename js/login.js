@@ -13,19 +13,6 @@ $( document ).ready(function() {
 
     var curTab = null;
 
-    try {
-        $('#close-btn').on('click', function(){
-            chrome.runtime.sendMessage({action: "shutdown-iframe"}, function(response) {
-                if (response.result != "success"){
-                    console.log("Response:" + response.result);
-                }
-            });
-        });
-    }
-    catch(err) {
-        console.log("error: " + err);
-    }
-
     $('#signup_link').on('click', function(){
          chrome.runtime.sendMessage({action: "open_signup_tab"}, function(response) {
             if (response.result != "success"){
@@ -93,7 +80,7 @@ $( document ).ready(function() {
                             'loginToken': response.token
                         }, function() {
                             localStorage.setItem("loginToken", response.token);
-                            window.location = "popup.html";
+                            window.location = "submit_article.html";
                         }
                     );
                 }

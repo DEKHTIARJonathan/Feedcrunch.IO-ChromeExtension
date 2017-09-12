@@ -22,6 +22,14 @@ $( document ).ready(function() {
 
             chrome.runtime.sendMessage({action: "get_pageinfo"}, function(response) {
 		        if (response.result == "success"){
+
+                    if (response.rss_link != null){
+                        $("#subscribe-btn").toggleClass('disabled', false);
+                    }
+                    else {
+                        $("#subscribe-btn").toggleClass('disabled', true);
+                    }
+
 		            $("#title").data("init", response.title);
 		        	$("#link").data("init", response.url);
 
@@ -94,20 +102,6 @@ $( document ).ready(function() {
 	            }
 	        });
 
-	        $('#close-btn').on('click', function(){
-	            chrome.runtime.sendMessage({action: "shutdown-iframe"}, function(response) {
-	            	if (response.result != "success"){
-	            		console.log("Response:" + response.result);
-	            	}
-				});
-	        });
-
-	        $('#disconnect-btn').on('click', function(){
-	            localStorage.removeItem('loginToken');
-	            chrome.storage.local.remove('loginToken');
-	            window.location = "login.html";
-	        });
-
 	        function clearFields() {
 		        var title = $("#title").data("init");
 		        var link = $("#link").data("init");
@@ -169,13 +163,13 @@ $( document ).ready(function() {
 		            showCancelButton: true,
 		            confirmButtonColor: "#DD6B55",
 		            confirmButtonText: "Yes, please reset!",
-		            cancelButtonText: "Please No!",
-		            closeOnConfirm: true,
-		            closeOnCancel: true
+		            cancelButtonText: "Please No!"
 		        }).then(function() {
 		            clearFields();
 		            swal.close();
-		        });
+                }, function(dismiss) {
+                    swal.close();
+                });
 		    });
 
 		    $("#submit").click(function() {
@@ -223,8 +217,7 @@ $( document ).ready(function() {
 		                        text: data.error,
 		                        type: "error",
 		                        confirmButtonColor: "#DD6B55",
-		                        confirmButtonText: "I'll Fix it!",
-		                        closeOnConfirm: true
+		                        confirmButtonText: "I'll Fix it!"
 		                    });
 		                }
 		            }

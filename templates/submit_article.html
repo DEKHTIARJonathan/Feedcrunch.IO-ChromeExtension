@@ -51,6 +51,12 @@
             right:15px;
             position: absolute;
         }
+        #subscribe-btn{
+            top:15px;
+            right:250px;
+            margin-top: 2px;
+            position: absolute;
+        }
         #disconnect-btn{
             top:15px;
             right:65px;
@@ -74,6 +80,10 @@
                     <a id="disconnect-btn" class="waves-effect waves-light btn red">
                         <i class="material-icons left">exit_to_app</i>
                         Disconnect
+                    </a>
+                    <a id="subscribe-btn" class="waves-effect waves-light btn orange darken-3 disabled">
+                        <i class="material-icons left">rss_feed</i>
+                        Subscribe to RSS Feed
                     </a>
 
                     <section>
@@ -183,7 +193,8 @@
     <script src="/plugins/js/materialize-tags.min.js"></script>
     <script src="/plugins/js/sweetalert2.min.js"></script>
 
-    <script src="/js/popup.js"></script>
+    <script src="/js/generic_btn_actions.js"></script>
+    <script src="/js/submit_article.js"></script>
 </body>
 
 </html>
