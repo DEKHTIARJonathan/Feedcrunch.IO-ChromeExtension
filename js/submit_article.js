@@ -1,8 +1,9 @@
 $( document ).ready(function() {
 
-    var endpoint = null;
-    var title    = null;
-    var page_url = null;
+    var endpoint   = null;
+    var auth_token = null;
+    var title      = null;
+    var page_url   = null;
 
     var max_tags = 5;
     var max_suggestion_display = 5;
@@ -16,67 +17,77 @@ $( document ).ready(function() {
         'autoformat'
     ];
 
-    chrome.runtime.sendMessage({action: "get_endpoint"}, function(response) {
-        if (response.result == "success"){
-            endpoint = response.endpoint;
+    try{
+        chrome.runtime.sendMessage({action: "get_endpoint"}, function(response) {
+            if (response.result == "success"){
+                endpoint = response.endpoint;
 
-            chrome.runtime.sendMessage({action: "get_pageinfo"}, function(response) {
-		        if (response.result == "success"){
+                chrome.storage.local.get('loginToken', function(result) {
+                    if (result.loginToken){
+                        auth_token = result.loginToken;
 
-                    if (response.rss_link != null){
-                        $("#subscribe-btn").toggleClass('disabled', false);
+                        chrome.runtime.sendMessage({action: "get_pageinfo"}, function(response) {
+            		        if (response.result == "success"){
+
+                                if (response.rss_link != null){
+                                    $("#subscribe-btn").toggleClass('disabled', false);
+                                }
+                                else {
+                                    $("#subscribe-btn").toggleClass('disabled', true);
+                                }
+
+            		            $("#title").data("init", response.title);
+            		        	$("#link").data("init", response.url);
+
+                                $.ajax({
+                    	            url: endpoint + "api/1.0/authenticated/get/user/preferences/",
+                    	            type: "GET",
+                    	            dataType: "json",
+                    	            beforeSend: function(xhr) {
+                    	                xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
+                    	            },
+                    	            success: function(data) {
+                    	                if (data.success) {
+                    	                    for (switch_box in switches_list) {
+                    	                        var input = $("#" + switches_list[switch_box]);
+
+                    	                        pref_value = data.preferences[switches_list[switch_box]];
+
+                    	                        if (pref_value == "disabled")
+                    	                            input.prop("disabled", true);
+                    	                        else
+                    	                            input.data("init", pref_value);
+                    	                    }
+
+                        		        	init_webpage();
+
+                    	                } else{
+                        		            throw ("Impossible to obtain user preferences:" + data.error);
+                                        }
+                    	            }
+                    	        });
+            		        }
+            		        else{
+            		            throw ("Impossible to obtain pageinfos:" + response.result);
+            		        }
+            		    });
                     }
-                    else {
-                        $("#subscribe-btn").toggleClass('disabled', true);
+                    else{
+                        throw ("User Not Logged In: loginToken does not exists!");
                     }
-
-		            $("#title").data("init", response.title);
-		        	$("#link").data("init", response.url);
-
-                    $.ajax({
-        	            url: endpoint + "api/1.0/authenticated/get/user/preferences/",
-        	            type: "GET",
-        	            dataType: "json",
-        	            beforeSend: function(xhr) {
-        	                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
-        	            },
-        	            success: function(data) {
-        	                if (data.success) {
-        	                    for (switch_box in switches_list) {
-        	                        var input = $("#" + switches_list[switch_box]);
-
-        	                        pref_value = data.preferences[switches_list[switch_box]];
-
-        	                        if (pref_value == "disabled")
-        	                            input.prop("disabled", true);
-        	                        else
-        	                            input.data("init", pref_value);
-        	                    }
-
-            		        	init_webpage();
-
-        	                } else
-        	                    console.log("Error: " + data.error);
-        	            }
-        	        });
-		        }
-		        else{
-		            console.log("Response:" + response.result);
-		        }
-		    });
-        }
-        else{
-            console.log("Response:" + response.result);
-        }
-    });
-
+                });
+            }
+            else {
+                throw ("Impossible to obtain the API endpoint.");
+            }
+        });
+    } catch (err) {
+        console.log("Error: " + err);
+        window.location = "login.html";
+    }
 
     function init_webpage(){
     	try {
-
-	        if (localStorage.getItem("loginToken") === null) {
-	            throw ("User Not Logged In: loginToken does not exists!");
-	        }
 
 	        var tags = new Bloodhound({
 	            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
@@ -84,10 +95,11 @@ $( document ).ready(function() {
 	            limit: max_suggestion_display,
 	            prefetch: {
 	                url: endpoint + "api/1.0/authenticated/get/tags/",
+	                cache: false,
 	                prepare: function(settings) {
 	                    settings.type = "GET";
 	                    settings.beforeSend = function(xhr) {
-	                        xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+	                        xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
 	                    };
 	                    return settings;
 	                },
@@ -97,8 +109,7 @@ $( document ).ready(function() {
 	                            name: tag
 	                        };
 	                    });
-	                },
-	                cache: false //NEW!
+	                }
 	            }
 	        });
 
@@ -189,7 +200,7 @@ $( document ).ready(function() {
 		                autoformat: $('#autoformat').prop('checked'),
 		            },
 		            beforeSend: function(xhr) {
-		                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+		                xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
 		            },
 		            success: function(data) {
 		                if (data.success) {

@@ -10,7 +10,6 @@ $( document ).ready(function() {
         });
 
         $('#disconnect-btn').on('click', function(){
-            localStorage.removeItem('loginToken');
             chrome.storage.local.remove('loginToken');
             window.location = "login.html";
         });

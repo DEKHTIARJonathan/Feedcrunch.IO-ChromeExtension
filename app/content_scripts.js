@@ -17,7 +17,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
                 if (!(result.loginToken))
                     target_webpage += "login.html";
                 else{
-                    localStorage.setItem("loginToken", result.loginToken);
                     target_webpage += "submit_article.html";
                 }
 

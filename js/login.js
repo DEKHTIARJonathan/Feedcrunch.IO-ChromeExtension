@@ -79,7 +79,6 @@ $( document ).ready(function() {
                     chrome.storage.local.set({
                             'loginToken': response.token
                         }, function() {
-                            localStorage.setItem("loginToken", response.token);
                             window.location = "submit_article.html";
                         }
                     );

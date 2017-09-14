@@ -54,9 +54,7 @@ function checkRSSFeeds() {
 
             }
         );
-
     });
-
 }
 
 //listen for new tab to be activated

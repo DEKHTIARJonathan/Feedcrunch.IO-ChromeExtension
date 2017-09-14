@@ -1,13 +1,45 @@
 $( document ).ready(function() {
 
-    var endpoint = null;
+    var endpoint   = null;
+    var auth_token = null;
 
-    try {
-        if (localStorage.getItem("loginToken") === null) {
-            throw ("User Not Logged In: loginToken does not exists!");
-        }
-    }
-    catch (err) {
+    try{
+        chrome.runtime.sendMessage({action: "get_endpoint"}, function(response) {
+            if (response.result == "success"){
+                endpoint = response.endpoint;
+
+                chrome.storage.local.get('loginToken', function(result) {
+                    if (result.loginToken){
+                        auth_token = result.loginToken;
+
+                        chrome.runtime.sendMessage({action: "get_pageinfo"}, function(response) {
+            		        if (response.result == "success"){
+                                if (response.rss_link == null){
+                                    window.location = "submit_article.html";
+                                }
+
+            		        	$("#rssfeed_link").data("init", response.rss_link);
+                                $("#rssfeed_link").val(response.rss_link);
+                                format_labels();
+
+                                updateFeedTitle();
+
+            		        }
+            		        else{
+            		            throw ("Impossible to obtain pageinfos:" + response.result);
+            		        }
+                        });
+                    }
+                    else{
+                        throw ("User Not Logged In: loginToken does not exists!");
+                    }
+                });
+            }
+            else {
+                throw ("Impossible to obtain the API endpoint.");
+            }
+        });
+    } catch (err) {
         console.log("Error: " + err);
         window.location = "login.html";
     }
@@ -64,7 +96,7 @@ $( document ).ready(function() {
             timeout: 5000, // sets timeout to 5 seconds
             dataType : "json",
             beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+                xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
                 info_div.text("Validating your input ...");
                 info_div.attr("class", "green-text text-darken-2");
                 if (title_label.hasClass( "active" )){
@@ -111,34 +143,6 @@ $( document ).ready(function() {
             }
         });
     }
-
-    chrome.runtime.sendMessage({action: "get_endpoint"}, function(response) {
-        if (response.result == "success"){
-            endpoint = response.endpoint;
-
-            chrome.runtime.sendMessage({action: "get_pageinfo"}, function(response) {
-		        if (response.result == "success"){
-
-                    if (response.rss_link == null){
-                        window.location = "submit_article.html";
-                    }
-
-		        	$("#rssfeed_link").data("init", response.rss_link);
-                    $("#rssfeed_link").val(response.rss_link);
-                    format_labels();
-
-                    updateFeedTitle();
-
-		        }
-		        else{
-		            console.log("Response:" + response.result);
-		        }
-		    });
-        }
-        else{
-            console.log("Response:" + response.result);
-        }
-    });
 
     $('#rssfeed_link').on('paste', function (){
         setTimeout($.proxy(function () {
@@ -194,7 +198,7 @@ $( document ).ready(function() {
 			timeout: 8000, // sets timeout to 8 seconds
 			dataType : "json",
 			beforeSend: function(xhr) {
-                xhr.setRequestHeader("Authorization", 'Token ' + localStorage.getItem("loginToken"));
+                xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
 				info_div.text("Verifying and subscribing to the RSS Feed ...");
 				info_div.attr("class", "green-text text-darken-2");
 			},
