@@ -126,6 +126,34 @@ chrome.runtime.onMessage.addListener(
             chrome.tabs.create({url: "https://www.feedcrunch.io/signup/"});
             sendResponse({result: "success"});
     	}
+    	else if (request.action == "open_admin_panel"){
+
+            chrome.storage.local.get('username', function(result) {
+                if (result.username){
+                    chrome.tabs.create({
+                        url: "https://www.feedcrunch.io/@" + result.username + "/admin/"
+                    });
+                }
+                else {
+                    console.log("Error: 'username' local variable does not exists.");
+                }
+            });
+            sendResponse({result: "success"});
+    	}
+    	else if (request.action == "open_personal_feed"){
+
+            chrome.storage.local.get('username', function(result) {
+                if (result.username){
+                    chrome.tabs.create({
+                        url: "https://www.feedcrunch.io/@" + result.username + "/"
+                    });
+                }
+                else {
+                    console.log("Error: 'username' local variable does not exists.");
+                }
+            });
+            sendResponse({result: "success"});
+    	}
     	else if(request.action == "shutdown-iframe"){
         	chrome.tabs.executeScript(sender.tab.id,
                 {code: 'document.getElementById("feedcrunch-window").remove();'}

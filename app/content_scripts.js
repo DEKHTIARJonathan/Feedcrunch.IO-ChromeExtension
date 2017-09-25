@@ -11,10 +11,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
             var target_webpage = null;
 
-            chrome.storage.local.get('loginToken', function(result) {
+            chrome.storage.local.get(['loginToken', 'username'], function(result) {
                 target_webpage = "templates/";
 
-                if (!(result.loginToken))
+                if (!(result.loginToken) || !(result.username))
                     target_webpage += "login.html";
                 else{
                     target_webpage += "submit_article.html";

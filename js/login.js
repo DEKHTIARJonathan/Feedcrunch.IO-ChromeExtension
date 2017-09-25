@@ -65,19 +65,23 @@ $( document ).ready(function() {
 
         if(! $("#login_form").valid()) return false;
 
+        var username = $("#username").val();
+        var password = $("#password").val();
+
         $.ajax({
             url: endpoint + "api/1.0/get_auth_token/",
             type: 'POST',
             data: {
-                'username': $("#username").val(),
-                'password': $("#password").val()
+                'username': username,
+                'password': password
             },
             dataType: "json",
             cache: false,
             success: function(response){
                 if (response.token) {
                     chrome.storage.local.set({
-                            'loginToken': response.token
+                            'loginToken': response.token,
+                            'username': username
                         }, function() {
                             window.location = "submit_article.html";
                         }
