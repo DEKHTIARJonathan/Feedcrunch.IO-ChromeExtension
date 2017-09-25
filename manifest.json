@@ -37,10 +37,11 @@
 
     "permissions": [
         "activeTab",
-        "tabs",
+        "contextMenus",
         "cookies",
-        "storage",
         "management",
+        "storage",
+        "tabs",
 		"http://*/*",
 		"https://*/*"
     ]

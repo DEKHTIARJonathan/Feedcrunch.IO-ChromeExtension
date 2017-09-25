@@ -26,6 +26,37 @@ var icon_data       = {
     }
 }
 
+/* ===================================================================================
+================ ############## Extension Entry Point ############## =================
+=================================================================================== */
+
+function OpenExtensionIFrame(){
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+        chrome.cookies.remove({url: api_endpoint, name: "sessionid"});
+
+        chrome.tabs.sendMessage(
+        	tabs[0].id,
+        	{
+	        	command: "create_window",
+	        	id: tabs[0].id,
+	        	title: tabs[0].title,
+	        	url: tabs[0].url,
+	        },
+	        function(response){
+                if (response != undefined && response.result != "success"){
+	            	console.log(response);
+	            	console.log(response.result);
+	            }
+        	}
+        );
+    });
+}
+
+/* ===================================================================================
+================= ############## RSS Checking Routine ############## =================
+=================================================================================== */
+
 function checkRSSFeeds() {
     //query the information on the active tab
     chrome.tabs.query({active: true, currentWindow: true}, function(tab){
@@ -67,6 +98,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     checkRSSFeeds();
 });
 
+/* ===================================================================================
+============= ############## Getting the correct Endpoint ############## =============
+=================================================================================== */
+
 chrome.management.get(chrome.runtime.id, function(app_info){
     if (app_info.installType == "development"){
 
@@ -86,30 +121,17 @@ chrome.management.get(chrome.runtime.id, function(app_info){
     }
 });
 
+/* ===================================================================================
+=============== ############## Browser Action Listeners ############## ===============
+=================================================================================== */
+
 chrome.browserAction.onClicked.addListener(function() {
-
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-
-        chrome.cookies.remove({url: api_endpoint, name: "sessionid"});
-
-        chrome.tabs.sendMessage(
-        	tabs[0].id,
-        	{
-	        	command: "create_window",
-	        	id: tabs[0].id,
-	        	title: tabs[0].title,
-	        	url: tabs[0].url,
-	        },
-	        function(response){
-                if (response != undefined && response.result != "success"){
-	            	console.log(response);
-	            	console.log(response.result);
-	            }
-        	}
-        );
-    });
-
+    OpenExtensionIFrame();
 });
+
+/* ===================================================================================
+=================== ############## Message Listeners ############## ==================
+=================================================================================== */
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -173,3 +195,26 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
+
+/* ===================================================================================
+================ ############## Context Menus Handling ############## ================
+=================================================================================== */
+
+function setUpContextMenus() {
+    chrome.contextMenus.create( {
+      title: "Share with FeedCrunch",
+      id: "ShareFC",
+      contexts: ['all']
+    });
+};
+
+chrome.runtime.onInstalled.addListener(function() {
+    // When the app gets installed, set up the context menus
+    setUpContextMenus();
+});
+
+chrome.contextMenus.onClicked.addListener(function(itemData) {
+    if (itemData.menuItemId == "ShareFC"){
+        OpenExtensionIFrame();
+    }
+});

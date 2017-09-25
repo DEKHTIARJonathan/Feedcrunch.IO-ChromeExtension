@@ -235,6 +235,24 @@ $( document ).ready(function() {
 		        });
 		    });
 
+            $('#my_feed-btn').on('click', function(){
+                 chrome.runtime.sendMessage({action: "open_personal_feed"}, function(response) {
+                    if (response.result != "success"){
+                        console.log("Response:" + response.result);
+                    }
+                });
+                return false;
+            });
+
+           $('#admin_panel-btn').on('click', function(){
+                chrome.runtime.sendMessage({action: "open_admin_panel"}, function(response) {
+                   if (response.result != "success"){
+                       console.log("Response:" + response.result);
+                   }
+               });
+               return false;
+           });
+
 		    clearFields();
 
 	    } catch (err) {
