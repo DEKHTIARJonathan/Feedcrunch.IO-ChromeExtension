@@ -27,6 +27,29 @@ var icon_data       = {
 }
 
 /* ===================================================================================
+============= ############## Getting the correct Endpoint ############## =============
+=================================================================================== */
+
+chrome.management.get(chrome.runtime.id, function(app_info){
+    if (app_info.installType == "development"){
+
+        icon_dict = icon_data.debug;
+
+        if (local){
+            api_endpoint = "https://local.feedcrunch.io:5000/";
+    	}
+        else{
+            api_endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
+        }
+        chrome.browserAction.setIcon({path: icon_dict.no_rss});
+    }
+    else {
+        icon_dict = icon_data.prod;
+        api_endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
+    }
+});
+
+/* ===================================================================================
 ================ ############## Extension Entry Point ############## =================
 =================================================================================== */
 
@@ -96,29 +119,6 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 //listen for current tab to be changed
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     checkRSSFeeds();
-});
-
-/* ===================================================================================
-============= ############## Getting the correct Endpoint ############## =============
-=================================================================================== */
-
-chrome.management.get(chrome.runtime.id, function(app_info){
-    if (app_info.installType == "development"){
-
-        icon_dict = icon_data.debug;
-
-        if (local){
-            api_endpoint = "https://local.feedcrunch.io:5000/";
-    	}
-        else{
-            api_endpoint = "https://feedcrunch-api-dev.eu-gb.mybluemix.net/";
-        }
-        chrome.browserAction.setIcon({path: icon_dict.no_rss});
-    }
-    else {
-        icon_dict = icon_data.prod;
-        api_endpoint = "https://feedcrunch-api-prod.eu-gb.mybluemix.net/";
-    }
 });
 
 /* ===================================================================================
