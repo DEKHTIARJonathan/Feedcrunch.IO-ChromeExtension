@@ -1,0 +1,12 @@
+body {
+    top: calc(50% - 250px);
+    height: 500px;
+}
+
+.card {
+    height: 500px;
+}
+
+#subscribe-form{
+    padding-top: 25px;
+}

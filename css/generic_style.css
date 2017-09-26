@@ -1,0 +1,62 @@
+body {
+    left: calc(50% - 600px);
+    width: 1200px;
+    position: absolute;
+    background-color:transparent;
+    font-size: 12px;
+}
+
+main{
+    top: 0px;
+    left: 0px;
+    position: absolute;
+}
+
+.card {
+    padding: 2em;
+    flex: 1 0 auto;
+    background: white;
+    border-radius: 40px;
+    width: 1200px;
+    margin: 0px;
+}
+
+#btn-row{
+    padding-top: 15px;
+}
+
+#close-btn{
+    top:15px;
+    right:15px;
+    position: absolute;
+}
+
+#disconnect-btn{
+    top:15px;
+    right:65px;
+    margin-top: 2px;
+    position: absolute;
+}
+
+#subscribe-btn,
+#return_to_submit-btn{
+    top:15px;
+    right:270px;
+    margin-top: 2px;
+    position: absolute;
+}
+
+#admin_panel-btn{
+    top:15px;
+    left:65px;
+    margin-top: 2px;
+    position: absolute;
+}
+
+#my_feed-btn{
+    top:15px;
+    left:260px;
+    margin-top: 2px;
+    margin-left: 15px;
+    position: absolute;
+}
