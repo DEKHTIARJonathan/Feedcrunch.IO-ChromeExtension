@@ -88,6 +88,44 @@ $( document ).ready(function() {
 
     function init_webpage(){
     	try {
+            $.ajax({
+                url: endpoint + "api/1.0/authenticated/get/article/exists/",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    link: $("#link").data("init"),
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", 'Token ' + auth_token);
+                },
+                success: function(data) {
+                    if (data.success) {
+                        if (data.exists){
+                            swal({
+                                title: 'You already shared this one...',
+                                type: 'info',
+                                html:
+                                    '<br><center>' +
+                                    'Article ID: '+ data.post_data.id +'<br>' +
+                                    '<a href="'+ data.post_data.link +'" target="_blank">' +
+                                    data.post_data.title +
+                                    '</a>' +
+                                    '</center>',
+                                confirmButtonColor: "#0277bd",
+                                confirmButtonText: 'Oh Yeah! Thanks.',
+                            })
+                        }
+                    } else {
+                        swal({
+                            title: "Something went wrong!",
+                            text: data.error,
+                            type: "error",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "I'll Fix it!"
+                        });
+                    }
+                }
+            });
 
 	        var tags = new Bloodhound({
 	            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
