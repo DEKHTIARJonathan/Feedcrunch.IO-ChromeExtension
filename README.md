@@ -15,9 +15,9 @@
 
 ### Project Dependencies
 
-* JQuery (v3.2.1): https://github.com/jquery/jquery
-* JQuery-Validation (v1.17.0): https://github.com/jquery-validation/jquery-validation
-* Materialize (v0.98.1): https://github.com/Dogfalo/materialize
-* Materialize-Tags (v1.1.0): https://github.com/henrychavez/materialize-tags
-* Sweetalert2 (v6.7.0): https://github.com/limonte/sweetalert2/
-* TypeAhead (v0.11.1): https://github.com/twitter/typeahead.js
+* JQuery (v3.2.1): https://github.com/jquery/jquery/tree/3.2.1/dist
+* JQuery-Validation (v1.17.0): https://github.com/jquery-validation/jquery-validation/tree/1.17.0/dist
+* Materialize (v0.100.2): https://github.com/Dogfalo/materialize/tree/v0.100.2/dist
+* Materialize-Tags (v1.2.0): https://github.com/henrychavez/materialize-tags/tree/1.2.0/dist
+* Sweetalert2 (v6.9.1): https://github.com/limonte/sweetalert2/tree/v6.9.1/dist
+* TypeAhead (v1.2.1): https://github.com/corejavascript/typeahead.js/tree/1.2.1/dist
