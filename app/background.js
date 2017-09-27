@@ -88,11 +88,40 @@ function checkRSSFeeds() {
             chrome.tabs.executeScript(
                 tabs[0].id,
                 {
-                    code: 'var rss_tag = document.querySelector("[type=\'application/rss+xml\']"); \
-                          if (rss_tag == null){rss_tag = document.querySelector("[type=\'application/atom+xml\']");} \
-                          if (rss_tag == null) {\
-                             if (["application/xhtml+xml","application/xml"].indexOf(document.contentType) > -1){document.documentURI;} else{null;} \
-                          } else { rss_tag.getAttribute("href");}'
+                    code: `
+                        var RSS_CONTENT_TYPES = [
+                            "application/xhtml+xml",
+                            "application/xml",
+                            "application/atom+xml",
+                            "application/rss+xml",
+                            "application/rdf+xml",
+                            "text/xml"
+                        ]
+
+                        var rss_tag = null;
+
+                        for (x in RSS_CONTENT_TYPES){
+                            rss_tag = document.querySelector("[type=\'"+RSS_CONTENT_TYPES [x]+"\']");
+                            if (rss_tag != null){
+                                feed_url = rss_tag.getAttribute("href");
+                                break;
+                            }
+                        }
+
+                        if (rss_tag == null) {
+                            if (RSS_CONTENT_TYPES.indexOf(document.contentType) > -1){
+                                feed_url = document.documentURI;
+                            } else {
+                                null;
+                            }
+                        }
+
+                        if (feed_url[0] == "/" &&  feed_url.substring(0, 2) != "//"){
+                            feed_url = window.location.origin + feed_url;
+                        }
+
+                        feed_url
+                        `
                 },
                 function(rss_href){
                     if(chrome.runtime.lastError == undefined){
