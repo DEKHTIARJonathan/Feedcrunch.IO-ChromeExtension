@@ -82,32 +82,40 @@ function OpenExtensionIFrame(){
 
 function checkRSSFeeds() {
     //query the information on the active tab
-    chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
 
-        chrome.tabs.executeScript(
-            tab[0].id,
-            {
-                code: 'var rss_tag = document.querySelector("[type=\'application/rss+xml\']"); \
-                      if (rss_tag == null){rss_tag = document.querySelector("[type=\'application/atom+xml\']");} \
-                      if (rss_tag == null) {null} else {rss_tag.href}'
-            },
-            function(rss_href){
-                if(chrome.runtime.lastError == undefined){
-                    current_rssfedd = rss_href[0];
-                    if (current_rssfedd != null){
-                        chrome.browserAction.setIcon({path: icon_dict.with_rss});
+        if (tabs.length > 0 && tabs[0].id != undefined){
+            chrome.tabs.executeScript(
+                tabs[0].id,
+                {
+                    code: 'var rss_tag = document.querySelector("[type=\'application/rss+xml\']"); \
+                          if (rss_tag == null){rss_tag = document.querySelector("[type=\'application/atom+xml\']");} \
+                          if (rss_tag == null) {\
+                             if (["application/xhtml+xml","application/xml"].indexOf(document.contentType) > -1){document.documentURI;} else{null;} \
+                          } else { rss_tag.getAttribute("href");}'
+                },
+                function(rss_href){
+                    if(chrome.runtime.lastError == undefined){
+                        current_rssfedd = rss_href[0];
+                        if (current_rssfedd != null){
+                            chrome.browserAction.setIcon({path: icon_dict.with_rss});
+                        }
+                        else {
+                            chrome.browserAction.setIcon({path: icon_dict.no_rss});
+                        }
                     }
                     else {
+                        current_rssfedd = null;
                         chrome.browserAction.setIcon({path: icon_dict.no_rss});
                     }
-                }
-                else {
-                    current_rssfedd = null;
-                    chrome.browserAction.setIcon({path: icon_dict.no_rss});
-                }
 
-            }
-        );
+                }
+            );
+        }
+        else{
+            current_rssfedd = null;
+            chrome.browserAction.setIcon({path: icon_dict.no_rss});
+        }
     });
 }
 
