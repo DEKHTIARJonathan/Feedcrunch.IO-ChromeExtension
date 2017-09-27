@@ -23,3 +23,7 @@ body {
     border-bottom: none;
     box-shadow: none;
 }
+
+.switch label {
+    font-size: 14px;
+}
