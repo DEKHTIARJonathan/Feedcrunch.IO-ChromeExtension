@@ -1,7 +1,9 @@
 # Feedcrunch.IO - WebExtension
 
-This repository is related to the Open-Source Project Feedcrunch.IO - https://www.feedcrunch.io <br>
 [![GitHub release](https://img.shields.io/github/release/DEKHTIARJonathan/FeedCrunch.IO.svg?label=Feedcrunch.IO)](https://github.com/DEKHTIARJonathan/FeedCrunch.IO)
+[![GitHub release](https://img.shields.io/github/release/DEKHTIARJonathan/Feedcrunch.IO-WebExtension.svg?label=Web%20Extension)](https://github.com/DEKHTIARJonathan/Feedcrunch.IO-WebExtension)
+
+This repository is related to the Open-Source Project Feedcrunch.IO - https://www.feedcrunch.io
 
 Feedcrunch is an open-source alternative to content management and sharing platform like: [Pocket](https://getpocket.com/) or [Buffer](https://buffer.com). 
 
@@ -19,7 +21,7 @@ Feedcrunch is an open-source alternative to content management and sharing platf
 
 ## Compatible with: Chrome - Firefox - Opera
 
-[![GitHub release](https://img.shields.io/github/release/DEKHTIARJonathan/Feedcrunch.IO-WebExtension.svg?label=github%20repository)](https://github.com/DEKHTIARJonathan/Feedcrunch.IO-WebExtension)
+
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/cgmjhmibefcmnkbppbinjjgjpbgdaklf.svg)](https://chrome.google.com/webstore/detail/feedcrunchio/cgmjhmibefcmnkbppbinjjgjpbgdaklf)
 [![Mozilla Add-on](https://img.shields.io/amo/v/feedcrunch-io.svg)](https://addons.mozilla.org/en-GB/firefox/addon/feedcrunch-io/)
 [![Opera Extension](https://img.shields.io/badge/opera-coming_soon-blue.svg)](https://github.com/DEKHTIARJonathan/Feedcrunch.IO-WebExtension/releases)
