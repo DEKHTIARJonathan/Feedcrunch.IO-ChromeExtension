@@ -1,4 +1,22 @@
 # Feedcrunch.IO - WebExtension
+
+This repository is related to the Open-Source Project Feedcrunch.IO - https://www.feedcrunch.io <br>
+[![GitHub release](https://img.shields.io/github/release/DEKHTIARJonathan/FeedCrunch.IO.svg?label=Feedcrunch.IO)](https://github.com/DEKHTIARJonathan/FeedCrunch.IO)
+
+Feedcrunch is an open-source alternative to content management and sharing platform like: [Pocket](https://getpocket.com/) or [Buffer](https://buffer.com). 
+
+**The main features are:**
+- Sharing any web pages on the social networks in a second: 
+  - Facebook
+  - Twitter
+  - LinkedIn
+  - Slack (Multi-Team and Multi-chanel)
+- Saving your readings and easily finding them back with our search engine.
+- Subscribe to as many RSS/Atom feeds you like in the platform
+- Obtain recommendations based on your readings and shares. Only read the most revelant news every day.
+- Obtain insights on the popularity of your posts and construct a social reputation.
+- Create a profile which aggregate every social profile you have to be easily found.
+
 ## Compatible with: Chrome - Firefox - Opera
 
 [![GitHub release](https://img.shields.io/github/release/DEKHTIARJonathan/Feedcrunch.IO-WebExtension.svg?label=github%20repository)](https://github.com/DEKHTIARJonathan/Feedcrunch.IO-WebExtension)
