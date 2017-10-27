@@ -98,7 +98,8 @@ function checkRSSFeeds() {
                             "text/xml"
                         ]
 
-                        var rss_tag = null;
+                        var rss_tag  = null;
+                        var feed_url = null;
 
                         for (x in RSS_CONTENT_TYPES){
                             rss_tag = document.querySelector("[type=\'"+RSS_CONTENT_TYPES [x]+"\']");
@@ -116,8 +117,10 @@ function checkRSSFeeds() {
                             }
                         }
 
-                        if (feed_url[0] == "/" &&  feed_url.substring(0, 2) != "//"){
-                            feed_url = window.location.origin + feed_url;
+                        if (feed_url != null) {
+                            if (feed_url[0] == "/" &&  feed_url.substring(0, 2) != "//"){
+                                feed_url = window.location.origin + feed_url;
+                            }
                         }
 
                         feed_url
