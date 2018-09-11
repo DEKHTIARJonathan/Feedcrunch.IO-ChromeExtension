@@ -189,7 +189,7 @@ $( document ).ready(function() {
 		}
 
 		$.ajax({
-			url : endpoint + "api/1.0/authenticated/post/rssfeed_subscribtion/",
+			url : endpoint + "api/1.0/authenticated/post/rssfeed_subscription/",
 			type : "POST",
 			data: {
                 "rssfeed_link": $("#rssfeed_link").val(),
