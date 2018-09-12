@@ -4,7 +4,7 @@
     "short_name": "Feedcrunch",
     "author": "Jonathan DEKHTIAR",
     "manifest_version": 2,
-    "version": "1.0.13",
+    "version": "1.0.14",
 
     "description": "Feedcrunch.IO - Chrome Extension",
     "icons": {
